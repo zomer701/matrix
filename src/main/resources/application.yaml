@@ -1,0 +1,17 @@
+number:
+  openapi:
+    key: ${OPENAI_API_KEY}
+aws:
+  dynamodb:
+    endpoint: http://localhost:8081
+    accessKeyId: DUMMYIDEXAMPLE
+    secretAccessKey: DUMMYEXAMPLEKEY
+
+#logging.level.org.springframework.data.r2dbc=DEBUG
+#logging:
+#  level:
+#    io.r2dbc.postgresql.QUERY: DEBUG # for queries
+#    io.r2dbc.postgresql.PARAM: DEBUG # for parameters
+#logging.level.org.springframework.r2dbc=TRACE
+#logging.level.org.springframework.r2dbc=DEBUG
+
