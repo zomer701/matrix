@@ -1,35 +1,40 @@
 package com.matrix.numbers.matrix.controller;
 
-import dev.langchain4j.model.openai.OpenAiChatModel;
+import com.matrix.numbers.matrix.dto.MatrixDto;
+import com.matrix.numbers.matrix.service.MatrixProcessingService;
+import com.matrix.numbers.matrix.utils.PythagoreanSquareUtils;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 @RestController
 @RequestMapping("/api/matrix")
+@Slf4j
 public class MatrixController {
 
-    @Value("${number.openapi.key}")
-    private String openApiKey;
+    @Resource
+    private MatrixProcessingService matrixProcessingService;
 
     @PostMapping
-    public Mono<String> sayHello() {
-
-//        OpenAiChatModel model = OpenAiChatModel.builder()
-//                .apiKey(openApiKey)
-//                .modelName(GPT_4_O_MINI)
-//                .build();
-//
-//        String answer = model.generate("Say 'Hello World'");
-//        System.out.println(answer);
-
-        return Mono.just("Hello, Reactive World!");
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> sayHello(@RequestBody @Valid MatrixDto matrix) {
+        return  matrixProcessingService.getChatResponse(matrix)
+                .onErrorResume(error -> {
+                    log.error("ChatResponse problem", error);
+//            if (error instanceof IllegalArgumentException) {
+//                return Mono.error(new CustomException("Custom error message for bad argument"));
+//            }
+            return Mono.error(error); // Pass through other errors
+        });
     }
 
 }

@@ -1,3 +1,6 @@
+server:
+  error:
+    include-stacktrace: never
 number:
   openapi:
     key: ${OPENAI_API_KEY}
